@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react'
 import { Container, Header, List } from "semantic-ui-react";
 import AccordionExampleForm from './form/form'
-import {login, resetWallet} from './web3/connectWallet'
+import {login, resetWallet, web3js} from './web3/connectWallet'
 
 const BigNumber = require('bignumber.js');
 
@@ -95,6 +95,7 @@ class App extends Component {
           {/* <button onClick={this.handleChange}>Connect Wallet</button> */}
         </div>
         <AccordionExampleForm data={this.state} />
+        
       </Container>
     )
   }

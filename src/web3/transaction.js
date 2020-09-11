@@ -61,6 +61,9 @@ async function approve(callback) {
 }
 
 async function deposit(amount) {
+    if (amount == '' || amount == "0") {
+        return
+    }
     const accounts = await web3js.eth.getAccounts();
     const address = accounts[0];
 
@@ -102,6 +105,10 @@ async function deposit(amount) {
 }
 
 async function withdraw(amount) {
+    if (amount == '' || amount == "0") {
+        return
+    }
+    
     const accounts = await web3js.eth.getAccounts();
     const address = accounts[0];
 

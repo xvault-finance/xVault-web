@@ -1,6 +1,6 @@
 import ethers from 'ethers'
 import usdcContractAbi from './usdcContract.abi.json'
-// import { web3js } from './connectWallet'
+import { web3js } from './connectWallet'
 const BigNumber = require('bignumber.js');
 const provider = window.ethereum;
 
@@ -22,14 +22,11 @@ export function tokenBalance({ tokenAddress, minimumBalance, tokenName }) {
     ];
 
     return async stateAndHelpers => {
-        const {
-            wallet: { provider },
-            address,
-            BigNumber
-        } = stateAndHelpers;
+        const accounts = await web3js.eth.getAccounts();
+        const address = accounts[0];
 
         if (!tokenContract) {
-            ethersProvider = new ethers.providers.Web3Provider(provider);
+            ethersProvider = new ethers.providers.Web3Provider(web3js.currentProvider);
             tokenContract = new ethers.Contract(tokenAddress, usdcContractAbi, ethersProvider);
         }
 
@@ -70,10 +67,11 @@ export async function checkBalance({ tokenAddress }) {
     let ethersProvider;
     let tokenContract;
 
-    const accounts = await provider.enable();
+    const accounts = await web3js.eth.getAccounts();
+    const address = accounts[0];
 
     if (!tokenContract) {
-        ethersProvider = new ethers.providers.Web3Provider(provider);
+        ethersProvider = new ethers.providers.Web3Provider(web3js.currentProvider);
         tokenContract = new ethers.Contract(tokenAddress, usdcContractAbi, ethersProvider);
     }
 

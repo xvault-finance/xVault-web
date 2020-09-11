@@ -11,22 +11,23 @@ class AccordionExampleForm extends React.Component {
             usdcInput: 0,
             xusdcInput: 0,
             usdcBalance: 0,
-            xusdcBalance: 0,
-            regexp: /^[0-9\b]+$/
+            xusdcBalance: 0
         };
 
         this.maxClick = this.maxClick.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    async componentDidMount() {
-        const usdcTokenBalanceCheck = await checkBalance({ tokenAddress: '0xe22da380ee6b445bb8273c81944adeb6e8450422' })
-        const xusdcTokenBalanceCheck = await checkBalance({ tokenAddress: '0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7' })
-
-        this.setState({
-            usdcBalance: usdcTokenBalanceCheck  / (10 ** 6),
-            xusdcBalance: xusdcTokenBalanceCheck  / (10 ** 6)
-        })
+    async componentWillReceiveProps(nextProps) {
+        if (this.props.data.logged !== nextProps.data.logged && nextProps.data.logged === true) {
+            const usdcTokenBalanceCheck = await checkBalance({ tokenAddress: '0xe22da380ee6b445bb8273c81944adeb6e8450422' })
+            const xusdcTokenBalanceCheck = await checkBalance({ tokenAddress: '0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7' })
+    
+            this.setState({
+                usdcBalance: usdcTokenBalanceCheck / (10 ** 6),
+                xusdcBalance: xusdcTokenBalanceCheck / (10 ** 6)
+            })
+        }
     }
 
     maxClick(name, balance) {
@@ -40,7 +41,7 @@ class AccordionExampleForm extends React.Component {
     handleInputChange(e) {
         let value = e.target.value;
         console.log(e.target.name)
-        if (!value.match(/^-?[0-9.]+$/)) {
+        if (!value.match(/^\d+(\.\d{1,2})?$/)) {
             return
         }
 
