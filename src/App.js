@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
-import { Button } from 'semantic-ui-react'
 import { Container, Header, List } from "semantic-ui-react";
-import AccordionExampleForm from './form/form'
-import {login, resetWallet, web3js} from './web3/connectWallet'
+
+import { Button, Dropdown, Menu } from 'semantic-ui-react'
+import UsdcForm from './form/usdcForm'
+import { login, resetWallet, web3js } from './web3/connectWallet'
 
 const BigNumber = require('bignumber.js');
 
@@ -15,12 +16,15 @@ class App extends Component {
       currentState: {
         balance: 0
       },
-      balance: 0
+      balance: 0,
+      activeItem: 'Home'
     };
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleReset = this.handleReset.bind(this);
   }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   async componentDidMount() {
     const previouslySelectedWallet = localStorage.getItem('selectedWallet')
@@ -65,37 +69,52 @@ class App extends Component {
   }
 
   render() {
+    const { activeItem } = this.state
+
     return (
       <Container style={{ margin: 20 }}>
-        <div>
-          {this.state.logged === true ? (
-            <div>
-              <h1>xVault
-          {/* <div>Account: {wallet.account}</div>
-          <div>Balance: {wallet.balance}</div> */}
+        <Menu inverted>
+          <Menu.Item
+            name='xVault'
+          />
+          <Menu.Item
+            name='Home'
+            active={activeItem === 'Home'}
+            onClick={this.handleItemClick}
+          />
+
+          <Menu.Menu position='right'>
+            <Dropdown item text='Language'>
+              <Dropdown.Menu>
+                <Dropdown.Item>English</Dropdown.Item>
+                <Dropdown.Item>Russian</Dropdown.Item>
+                <Dropdown.Item>Spanish</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Menu.Item>
+              {this.state.logged === true ? (
+
                 <Button
                   color='grey'
                   content='Disconnect Wallet'
                   floated='right'
                   onClick={this.handleReset}
                 />
-              </h1>
-            </div>
-          ) : (
-              <div>
-                <h1>xVault
-                <Button
+              ) : (
+                  <Button
                     content='Connect Wallet'
                     floated='right'
                     onClick={this.handleLogin}
                   />
-                </h1>
-              </div>
-            )}
-          {/* <button onClick={this.handleChange}>Connect Wallet</button> */}
-        </div>
-        <AccordionExampleForm data={this.state} />
-        
+                )}
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+        <UsdcForm data={this.state} />
+        <UsdcForm data={this.state} />
+        <UsdcForm data={this.state} />
+
       </Container>
     )
   }

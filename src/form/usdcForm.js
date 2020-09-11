@@ -3,8 +3,9 @@ import { Accordion, Button, Form, Segment, Input } from 'semantic-ui-react'
 import { readyToTransact } from '../web3/connectWallet'
 import { deposit, withdraw } from '../web3/transaction'
 import { checkBalance } from '../web3/balanceCheck'
+import './form.css'
 
-class AccordionExampleForm extends React.Component {
+class UsdcForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +23,7 @@ class AccordionExampleForm extends React.Component {
         if (this.props.data.logged !== nextProps.data.logged && nextProps.data.logged === true) {
             const usdcTokenBalanceCheck = await checkBalance({ tokenAddress: '0xe22da380ee6b445bb8273c81944adeb6e8450422' })
             const xusdcTokenBalanceCheck = await checkBalance({ tokenAddress: '0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7' })
-    
+
             this.setState({
                 usdcBalance: usdcTokenBalanceCheck / (10 ** 6),
                 xusdcBalance: xusdcTokenBalanceCheck / (10 ** 6)
@@ -56,7 +57,11 @@ class AccordionExampleForm extends React.Component {
         return (
             <Segment>
                 <Form>
-                    <h2>USDC</h2>
+                    <h2>
+                        <img id="test" height="50px"
+                            src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@94f058ab4a5214c6f27b7e2aba59fd8f3f4462aa/128/icon/usdc.png" alt="usdc" />
+                        <span className="apy">USDC vault apy: 80%</span>
+                    </h2>
                     <Form.Group widths={2}>
                         <Form.Input
                             name="usdc"
@@ -99,4 +104,4 @@ class AccordionExampleForm extends React.Component {
     }
 }
 
-export default AccordionExampleForm
+export default UsdcForm
