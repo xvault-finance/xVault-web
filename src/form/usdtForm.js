@@ -3,6 +3,8 @@ import { Button, Form, Segment, Message } from 'semantic-ui-react'
 import { readyToTransact } from '../web3/connectWallet'
 import { deposit, withdraw } from '../web3/transaction'
 import { checkBalance } from '../web3/balanceCheck'
+import { FormattedMessage } from 'react-intl';
+import {injectIntl} from 'react-intl'; 
 import './form.css'
 
 const kovanUsdt = "0xe22da380ee6b445bb8273c81944adeb6e8450422";
@@ -58,6 +60,7 @@ class UsdtForm extends React.Component {
     }
 
     render() {
+        const { intl } = this.props;
 
         return (
             <div>
@@ -65,27 +68,27 @@ class UsdtForm extends React.Component {
                     <img id="test" height="50px"
                         src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@94f058ab4a5214c6f27b7e2aba59fd8f3f4462aa/128/icon/usdt.png" alt="usdt" />
                     <Message.Content className="messageContent">
-                        <Message.Header>USDT Vault</Message.Header>
-                            APY of the Vault: 80%
+                        <Message.Header>USDT {intl.formatMessage({id: 'form.vault'})}</Message.Header>
+                            <FormattedMessage id="form.apy" values={{ apy: '80%' }} /> 
                     </Message.Content>
                 </Message>
                 <Form className='attached fluid segment'>
                     <Form.Group widths={2}>
                         <Form.Input
                             name="usdt"
-                            action={{ content: 'Max', onClick: (e) => { this.maxClick("usdt", this.state.usdtBalance) } }}
-                            type='number' label={'Balance: ' + this.state.usdtBalance + ' USDT'}
+                            action={{ content: intl.formatMessage({id: 'form.max'}), onClick: (e) => { this.maxClick("usdt", this.state.usdtBalance) } }}
+                            type='number' label={intl.formatMessage({id: 'form.balance'}) + this.state.usdtBalance + ' USDT'}
                             placeholder='0.00' value={this.state.usdtInput} onChange={this.handleInputChange} />
                         <Form.Input
                             name="xusdt"
-                            action={{ content: 'Max', onClick: (e) => { this.maxClick("xusdt", this.state.xusdtBalance) } }}
-                            type='number' label={'Balance: ' + this.state.xusdtBalance + ' xUSDT'}
+                            action={{ content: intl.formatMessage({id: 'form.max'}), onClick: (e) => { this.maxClick("xusdt", this.state.xusdtBalance) } }}
+                            type='number' label={intl.formatMessage({id: 'form.balance'}) + this.state.xusdtBalance + ' xUSDT'}
                             placeholder='0.00' value={this.state.xusdtInput} onChange={this.handleInputChange} />
                     </Form.Group>
                     {/* <Accordion as={Form.Field} panels={panels} /> */}
 
                     <Button
-                        content='Deposit'
+                        content={intl.formatMessage({id: 'form.deposit'})}
                         primary
                         onClick={async () => {
                             const ready = await readyToTransact()
@@ -96,7 +99,7 @@ class UsdtForm extends React.Component {
                         }}
                     />
                     <Button
-                        content='Withdraw'
+                        content={intl.formatMessage({id: 'form.withdraw'})}
                         primary
                         onClick={async () => {
                             const ready = await readyToTransact()
@@ -112,4 +115,4 @@ class UsdtForm extends React.Component {
     }
 }
 
-export default UsdtForm
+export default injectIntl(UsdtForm)

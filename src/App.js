@@ -6,6 +6,7 @@ import { Button, Dropdown, Menu } from 'semantic-ui-react'
 import UsdcForm from './form/usdcForm'
 import UsdtForm from './form/usdtForm'
 import { login, resetWallet, web3js } from './web3/connectWallet'
+import { FormattedMessage } from 'react-intl';
 
 const BigNumber = require('bignumber.js');
 
@@ -79,36 +80,54 @@ class App extends Component {
           <Menu.Item
             name='xVault'
           />
-          <Menu.Item
-            name='Home'
-            active={activeItem === 'Home'}
-            onClick={this.handleItemClick}
-          />
+
+          <FormattedMessage id="app.home">
+            {
+              (msg) => <Menu.Item
+                name={msg}
+                active={activeItem === 'Home'}
+                onClick={this.handleItemClick}
+              />
+            }
+          </FormattedMessage>
 
           <Menu.Menu position='right'>
-            <Dropdown item text='Language'>
-              <Dropdown.Menu>
-                <Dropdown.Item>English</Dropdown.Item>
-                <Dropdown.Item>Russian</Dropdown.Item>
-                <Dropdown.Item>Spanish</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <FormattedMessage id="app.language">
+              {
+                (msg) => <Dropdown item text={msg}>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => this.props.setLocale('en-US')}>English</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.props.setLocale('zh-cn')}>简中</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.props.setLocale('zh-tw')}>繁中</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              }
+            </FormattedMessage>
 
             <Menu.Item>
               {this.state.logged === true ? (
 
-                <Button
-                  color='grey'
-                  content='Disconnect'
-                  floated='right'
-                  onClick={this.handleReset}
-                />
+                <FormattedMessage id="app.disconnect">
+                  {
+                    (msg) => <Button
+                      color='grey'
+                      content={msg}
+                      floated='right'
+                      onClick={this.handleReset}
+                    />
+                  }
+                </FormattedMessage>
               ) : (
-                  <Button
-                    content='Unlock'
-                    floated='right'
-                    onClick={this.handleLogin}
-                  />
+                  <FormattedMessage id="app.connect">
+                    {
+                      (msg) => <Button
+                        content={msg}
+                        floated='right'
+                        onClick={this.handleLogin}
+                      />
+                    }
+                  </FormattedMessage>
+
                 )}
             </Menu.Item>
           </Menu.Menu>
@@ -117,7 +136,7 @@ class App extends Component {
         <br />
         <UsdtForm data={this.state} />
 
-      </Container>
+      </Container >
     )
   }
 }
