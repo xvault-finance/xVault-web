@@ -1,6 +1,6 @@
 import Notify from "bnc-notify"
 import { web3js } from './connectWallet'
-import abi from './erc20.abi.json'
+import erc20abi from './erc20.abi.json'
 import usdcContractAbi from './usdcContract.abi.json'
 
 const notify = Notify({
@@ -45,7 +45,7 @@ async function approve(coinAddress, contractAddress, callback) {
     const accounts = await web3js.eth.getAccounts();
     const address = accounts[0];
 
-    const erc20Instance = new web3js.eth.Contract(abi, coinAddress);
+    const erc20Instance = new web3js.eth.Contract(erc20abi, coinAddress);
     await erc20Instance.methods.approve(contractAddress, maxApproval).send({ from: address, gasPrice: web3js.utils.toWei(await _getGasPrice(), 'gwei') })
         .on("transactionHash", hash => {
             notify.hash(hash);
@@ -58,7 +58,7 @@ async function approve(coinAddress, contractAddress, callback) {
 
 }
 
-async function deposit(amount, coinAddress, contractAddress) {
+async function deposit(amount, coinAddress, contractAddress, decimals) {
     if (amount == '' || amount == "0") {
         return
     }
@@ -66,10 +66,13 @@ async function deposit(amount, coinAddress, contractAddress) {
     const address = accounts[0];
 
     var amountToSend = web3js.utils.toWei(amount, "ether")
-    amountToSend = amount * 10 ** 6;
+    if (decimals !== 18) {
+        amountToSend = amount * 10 ** 6;
+    }
+    
     // amountToSend = amount*10**6;
 
-    const erc20Instance = new web3js.eth.Contract(abi, coinAddress);
+    const erc20Instance = new web3js.eth.Contract(erc20abi, coinAddress);
 
     // check allowance 
     var allowance = await erc20Instance.methods.allowance(address, contractAddress).call((err, allowance) => {
@@ -102,7 +105,7 @@ async function deposit(amount, coinAddress, contractAddress) {
         })
 }
 
-async function withdraw(amount, contractAddress) {
+async function withdraw(amount, contractAddress, decimals) {
     if (amount == '' || amount == "0") {
         return
     }
@@ -111,7 +114,9 @@ async function withdraw(amount, contractAddress) {
     const address = accounts[0];
 
     var amountToSend = web3js.utils.toWei(amount, "ether")
-    amountToSend = amount * 10 ** 6;
+    if (decimals !== 18) {
+        amountToSend = amount * 10 ** 6;
+    }
     // amountToSend = amount*10**6;
 
     var contractInstance = new web3js.eth.Contract(usdcContractAbi, contractAddress);

@@ -7,7 +7,8 @@ import './form.css'
 
 const kovanUsdc = "0xe22da380ee6b445bb8273c81944adeb6e8450422";
 const kovanxUsdc = "0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7";
-const contractAddress = "0x2b6cF5bd95B9D75de255f9dd48Ff3b1D269E09D7"
+const contractAddress = "0x2b6cF5bd95B9D75de255f9dd48Ff3b1D269E09D7";
+const decimals = 6;
 
 class UsdcForm extends React.Component {
     constructor(props) {
@@ -91,7 +92,7 @@ class UsdcForm extends React.Component {
                             if (!ready) return
                             // sendTransaction()
                             // approve()
-                            deposit(this.state.usdcInput, kovanUsdc, contractAddress)
+                            deposit(this.state.usdcInput, kovanUsdc, contractAddress, decimals)
                         }}
                     />
                     <Button
@@ -102,7 +103,7 @@ class UsdcForm extends React.Component {
                             if (!ready) return
                             // sendTransaction()
                             // approve()
-                            withdraw(this.state.xusdcInput, contractAddress)
+                            withdraw(this.state.xusdcInput, contractAddress, decimals)
                         }}
                     />
                 </Form>

@@ -7,7 +7,8 @@ import './form.css'
 
 const kovanUsdt = "0xe22da380ee6b445bb8273c81944adeb6e8450422";
 const kovanxUsdt = "0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7";
-const contractAddress = "0x2b6cF5bd95B9D75de255f9dd48Ff3b1D269E09D7"
+const contractAddress = "0x2b6cF5bd95B9D75de255f9dd48Ff3b1D269E09D7";
+const decimals = 6;
 
 class UsdtForm extends React.Component {
     constructor(props) {
@@ -64,7 +65,7 @@ class UsdtForm extends React.Component {
                     <img id="test" height="50px"
                         src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@94f058ab4a5214c6f27b7e2aba59fd8f3f4462aa/128/icon/usdt.png" alt="usdt" />
                     <Message.Content className="messageContent">
-                        <Message.Header>usdt Vault</Message.Header>
+                        <Message.Header>USDT Vault</Message.Header>
                             APY of the Vault: 80%
                     </Message.Content>
                 </Message>
@@ -73,12 +74,12 @@ class UsdtForm extends React.Component {
                         <Form.Input
                             name="usdt"
                             action={{ content: 'Max', onClick: (e) => { this.maxClick("usdt", this.state.usdtBalance) } }}
-                            type='number' label={'Balance: ' + this.state.usdtBalance + ' usdt'}
+                            type='number' label={'Balance: ' + this.state.usdtBalance + ' USDT'}
                             placeholder='0.00' value={this.state.usdtInput} onChange={this.handleInputChange} />
                         <Form.Input
                             name="xusdt"
                             action={{ content: 'Max', onClick: (e) => { this.maxClick("xusdt", this.state.xusdtBalance) } }}
-                            type='number' label={'Balance: ' + this.state.xusdtBalance + ' xusdt'}
+                            type='number' label={'Balance: ' + this.state.xusdtBalance + ' xUSDT'}
                             placeholder='0.00' value={this.state.xusdtInput} onChange={this.handleInputChange} />
                     </Form.Group>
                     {/* <Accordion as={Form.Field} panels={panels} /> */}
@@ -91,7 +92,7 @@ class UsdtForm extends React.Component {
                             if (!ready) return
                             // sendTransaction()
                             // approve()
-                            deposit(this.state.usdtInput, kovanUsdt, contractAddress)
+                            deposit(this.state.usdtInput, kovanUsdt, contractAddress, decimals)
                         }}
                     />
                     <Button
@@ -102,7 +103,7 @@ class UsdtForm extends React.Component {
                             if (!ready) return
                             // sendTransaction()
                             // approve()
-                            withdraw(this.state.xusdtInput, contractAddress)
+                            withdraw(this.state.xusdtInput, contractAddress, decimals)
                         }}
                     />
                 </Form>
