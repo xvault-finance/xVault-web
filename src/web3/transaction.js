@@ -11,8 +11,6 @@ const notify = Notify({
 const provider = window.ethereum;
 const maxApproval = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
 
-const kovanUsdc = "0xe22da380ee6b445bb8273c81944adeb6e8450422";
-const contractAddress = "0x2b6cF5bd95B9D75de255f9dd48Ff3b1D269E09D7"
 const rp = require('request-promise');
 
 async function _getGasPrice() {
@@ -43,11 +41,11 @@ async function sendTransaction() {
         })
 }
 
-async function approve(callback) {
+async function approve(coinAddress, contractAddress, callback) {
     const accounts = await web3js.eth.getAccounts();
     const address = accounts[0];
 
-    const erc20Instance = new web3js.eth.Contract(abi, kovanUsdc);
+    const erc20Instance = new web3js.eth.Contract(abi, coinAddress);
     await erc20Instance.methods.approve(contractAddress, maxApproval).send({ from: address, gasPrice: web3js.utils.toWei(await _getGasPrice(), 'gwei') })
         .on("transactionHash", hash => {
             notify.hash(hash);
@@ -60,7 +58,7 @@ async function approve(callback) {
 
 }
 
-async function deposit(amount) {
+async function deposit(amount, coinAddress, contractAddress) {
     if (amount == '' || amount == "0") {
         return
     }
@@ -71,7 +69,7 @@ async function deposit(amount) {
     amountToSend = amount * 10 ** 6;
     // amountToSend = amount*10**6;
 
-    const erc20Instance = new web3js.eth.Contract(abi, kovanUsdc);
+    const erc20Instance = new web3js.eth.Contract(abi, coinAddress);
 
     // check allowance 
     var allowance = await erc20Instance.methods.allowance(address, contractAddress).call((err, allowance) => {
@@ -83,7 +81,7 @@ async function deposit(amount) {
     });
 
     if (allowance == 0) {
-        await approve((err, result) => {
+        await approve(coinAddress, contractAddress, (err, result) => {
             if (err) {
                 return
             }
@@ -92,9 +90,9 @@ async function deposit(amount) {
 
     }
 
-    var usdcContractInstance = new web3js.eth.Contract(usdcContractAbi, contractAddress);
+    var contractInstance = new web3js.eth.Contract(usdcContractAbi, contractAddress);
 
-    await usdcContractInstance.methods.deposit(amountToSend).send({ from: address, gasPrice: web3js.utils.toWei(await _getGasPrice(), 'gwei') })
+    await contractInstance.methods.deposit(amountToSend).send({ from: address, gasPrice: web3js.utils.toWei(await _getGasPrice(), 'gwei') })
         .on("transactionHash", hash => {
             notify.hash(hash);
             console.log(hash)
@@ -104,11 +102,11 @@ async function deposit(amount) {
         })
 }
 
-async function withdraw(amount) {
+async function withdraw(amount, contractAddress) {
     if (amount == '' || amount == "0") {
         return
     }
-    
+
     const accounts = await web3js.eth.getAccounts();
     const address = accounts[0];
 
@@ -116,9 +114,9 @@ async function withdraw(amount) {
     amountToSend = amount * 10 ** 6;
     // amountToSend = amount*10**6;
 
-    var xusdcContractInstance = new web3js.eth.Contract(usdcContractAbi, contractAddress);
+    var contractInstance = new web3js.eth.Contract(usdcContractAbi, contractAddress);
 
-    await xusdcContractInstance.methods.withdraw(amountToSend).send({ from: address, gasPrice: web3js.utils.toWei(await _getGasPrice(), 'gwei') })
+    await contractInstance.methods.withdraw(amountToSend).send({ from: address, gasPrice: web3js.utils.toWei(await _getGasPrice(), 'gwei') })
         .on("transactionHash", hash => {
             notify.hash(hash);
             console.log(hash)

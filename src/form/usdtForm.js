@@ -5,18 +5,18 @@ import { deposit, withdraw } from '../web3/transaction'
 import { checkBalance } from '../web3/balanceCheck'
 import './form.css'
 
-const kovanUsdc = "0xe22da380ee6b445bb8273c81944adeb6e8450422";
-const kovanxUsdc = "0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7";
+const kovanUsdt = "0xe22da380ee6b445bb8273c81944adeb6e8450422";
+const kovanxUsdt = "0x2b6cf5bd95b9d75de255f9dd48ff3b1d269e09d7";
 const contractAddress = "0x2b6cF5bd95B9D75de255f9dd48Ff3b1D269E09D7"
 
-class UsdcForm extends React.Component {
+class UsdtForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            usdcInput: 0,
-            xusdcInput: 0,
-            usdcBalance: 0,
-            xusdcBalance: 0
+            usdtInput: 0,
+            xusdtInput: 0,
+            usdtBalance: 0,
+            xusdtBalance: 0
         };
 
         this.maxClick = this.maxClick.bind(this);
@@ -25,12 +25,12 @@ class UsdcForm extends React.Component {
 
     async componentWillReceiveProps(nextProps) {
         if (this.props.data.logged !== nextProps.data.logged && nextProps.data.logged === true) {
-            const usdcTokenBalanceCheck = await checkBalance({ tokenAddress: kovanUsdc })
-            const xusdcTokenBalanceCheck = await checkBalance({ tokenAddress: kovanxUsdc })
+            const usdtTokenBalanceCheck = await checkBalance({ tokenAddress: kovanUsdt })
+            const xusdtTokenBalanceCheck = await checkBalance({ tokenAddress: kovanxUsdt })
 
             this.setState({
-                usdcBalance: usdcTokenBalanceCheck / (10 ** 6),
-                xusdcBalance: xusdcTokenBalanceCheck / (10 ** 6)
+                usdtBalance: usdtTokenBalanceCheck / (10 ** 6),
+                xusdtBalance: xusdtTokenBalanceCheck / (10 ** 6)
             })
         }
     }
@@ -62,24 +62,24 @@ class UsdcForm extends React.Component {
             <div>
                 <Message icon attached>
                     <img id="test" height="50px"
-                        src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@94f058ab4a5214c6f27b7e2aba59fd8f3f4462aa/128/icon/usdc.png" alt="usdc" />
+                        src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@94f058ab4a5214c6f27b7e2aba59fd8f3f4462aa/128/icon/usdt.png" alt="usdt" />
                     <Message.Content className="messageContent">
-                        <Message.Header>USDC Vault</Message.Header>
+                        <Message.Header>usdt Vault</Message.Header>
                             APY of the Vault: 80%
                     </Message.Content>
                 </Message>
                 <Form className='attached fluid segment'>
                     <Form.Group widths={2}>
                         <Form.Input
-                            name="usdc"
-                            action={{ content: 'Max', onClick: (e) => { this.maxClick("usdc", this.state.usdcBalance) } }}
-                            type='number' label={'Balance: ' + this.state.usdcBalance + ' USDC'}
-                            placeholder='0.00' value={this.state.usdcInput} onChange={this.handleInputChange} />
+                            name="usdt"
+                            action={{ content: 'Max', onClick: (e) => { this.maxClick("usdt", this.state.usdtBalance) } }}
+                            type='number' label={'Balance: ' + this.state.usdtBalance + ' usdt'}
+                            placeholder='0.00' value={this.state.usdtInput} onChange={this.handleInputChange} />
                         <Form.Input
-                            name="xusdc"
-                            action={{ content: 'Max', onClick: (e) => { this.maxClick("xusdc", this.state.xusdcBalance) } }}
-                            type='number' label={'Balance: ' + this.state.xusdcBalance + ' xUSDC'}
-                            placeholder='0.00' value={this.state.xusdcInput} onChange={this.handleInputChange} />
+                            name="xusdt"
+                            action={{ content: 'Max', onClick: (e) => { this.maxClick("xusdt", this.state.xusdtBalance) } }}
+                            type='number' label={'Balance: ' + this.state.xusdtBalance + ' xusdt'}
+                            placeholder='0.00' value={this.state.xusdtInput} onChange={this.handleInputChange} />
                     </Form.Group>
                     {/* <Accordion as={Form.Field} panels={panels} /> */}
 
@@ -91,7 +91,7 @@ class UsdcForm extends React.Component {
                             if (!ready) return
                             // sendTransaction()
                             // approve()
-                            deposit(this.state.usdcInput, kovanUsdc, contractAddress)
+                            deposit(this.state.usdtInput, kovanUsdt, contractAddress)
                         }}
                     />
                     <Button
@@ -102,7 +102,7 @@ class UsdcForm extends React.Component {
                             if (!ready) return
                             // sendTransaction()
                             // approve()
-                            withdraw(this.state.xusdcInput, contractAddress)
+                            withdraw(this.state.xusdtInput, contractAddress)
                         }}
                     />
                 </Form>
@@ -111,4 +111,4 @@ class UsdcForm extends React.Component {
     }
 }
 
-export default UsdcForm
+export default UsdtForm

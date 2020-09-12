@@ -4,6 +4,7 @@ import { Container, Header, List } from "semantic-ui-react";
 
 import { Button, Dropdown, Menu } from 'semantic-ui-react'
 import UsdcForm from './form/usdcForm'
+import UsdtForm from './form/usdtForm'
 import { login, resetWallet, web3js } from './web3/connectWallet'
 
 const BigNumber = require('bignumber.js');
@@ -72,6 +73,7 @@ class App extends Component {
     const { activeItem } = this.state
 
     return (
+
       <Container style={{ margin: 20 }}>
         <Menu inverted>
           <Menu.Item
@@ -97,13 +99,13 @@ class App extends Component {
 
                 <Button
                   color='grey'
-                  content='Disconnect Wallet'
+                  content='Disconnect'
                   floated='right'
                   onClick={this.handleReset}
                 />
               ) : (
                   <Button
-                    content='Connect Wallet'
+                    content='Unlock'
                     floated='right'
                     onClick={this.handleLogin}
                   />
@@ -112,8 +114,8 @@ class App extends Component {
           </Menu.Menu>
         </Menu>
         <UsdcForm data={this.state} />
-        <UsdcForm data={this.state} />
-        <UsdcForm data={this.state} />
+        <br />
+        <UsdtForm data={this.state} />
 
       </Container>
     )
