@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 
-import { Container, Header, List } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 
 import { Button, Dropdown, Menu } from 'semantic-ui-react'
 import UsdcForm from './form/usdcForm'
 import UsdtForm from './form/usdtForm'
 import { login, resetWallet, web3js } from './web3/connectWallet'
+import { injectIntl } from 'react-intl';
 import { FormattedMessage } from 'react-intl';
+
+import './App.css'
 
 const BigNumber = require('bignumber.js');
 
@@ -72,37 +75,31 @@ class App extends Component {
 
   render() {
     const { activeItem } = this.state
+    const { intl } = this.props;
 
     return (
 
-      <Container style={{ margin: 20 }}>
-        <Menu inverted>
+      // <Container style={{ margin: 20 }}>
+      <Container>
+        <Menu inverted secondary size='huge'>
           <Menu.Item
             name='xVault'
           />
 
-          <FormattedMessage id="app.home">
-            {
-              (msg) => <Menu.Item
-                name={msg}
-                active={activeItem === 'Home'}
-                onClick={this.handleItemClick}
-              />
-            }
-          </FormattedMessage>
+          <Menu.Item
+            name={intl.formatMessage({ id: 'app.home' })}
+            active={activeItem === 'Home'}
+            onClick={this.handleItemClick}
+          />
 
           <Menu.Menu position='right'>
-            <FormattedMessage id="app.language">
-              {
-                (msg) => <Dropdown item text={msg}>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => this.props.setLocale('en-US')}>English</Dropdown.Item>
-                    <Dropdown.Item onClick={() => this.props.setLocale('zh-cn')}>简中</Dropdown.Item>
-                    <Dropdown.Item onClick={() => this.props.setLocale('zh-tw')}>繁中</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              }
-            </FormattedMessage>
+            <Dropdown item text={intl.formatMessage({ id: 'app.language' })}>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => this.props.setLocale('en-US')}>English</Dropdown.Item>
+                <Dropdown.Item onClick={() => this.props.setLocale('zh-cn')}>简中</Dropdown.Item>
+                <Dropdown.Item onClick={() => this.props.setLocale('zh-tw')}>繁中</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
 
             <Menu.Item>
               {this.state.logged === true ? (
@@ -141,4 +138,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default injectIntl(App);
