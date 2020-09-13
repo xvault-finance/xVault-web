@@ -129,7 +129,10 @@ class App extends Component {
             </Menu.Item>
           </Menu.Menu>
         </Menu>
+        <br />
+        <br />
         <UsdcForm data={this.state} />
+        <br />
         <br />
         <UsdtForm data={this.state} />
 
