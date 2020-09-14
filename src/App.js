@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Container } from "semantic-ui-react";
+import { Container, Grid } from "semantic-ui-react";
 
 import { Button, Dropdown, Menu } from 'semantic-ui-react'
 import UsdcForm from './form/usdcForm'
@@ -8,6 +8,7 @@ import UsdtForm from './form/usdtForm'
 import { login, resetWallet, web3js } from './web3/connectWallet'
 import { injectIntl } from 'react-intl';
 import { FormattedMessage } from 'react-intl';
+import footer from './page/footer'
 
 import './App.css'
 
@@ -81,16 +82,17 @@ class App extends Component {
 
       // <Container style={{ margin: 20 }}>
       <Container>
-        <Menu inverted secondary size='huge'>
+        <Menu inverted secondary>
           <Menu.Item
             name='xVault'
+            onClick={() => this.handleItemClick}
           />
 
-          <Menu.Item
-            name={intl.formatMessage({ id: 'app.home' })}
-            active={activeItem === 'Home'}
-            onClick={this.handleItemClick}
-          />
+          {/* <Dropdown item text={intl.formatMessage({ id: 'app.page' })}>
+            <Dropdown.Menu>
+              <Dropdown.Item active={activeItem === 'Home'} onClick={() => this.handleItemClick}>{intl.formatMessage({ id: 'app.home' })}</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown> */}
 
           <Menu.Menu position='right'>
             <Dropdown item text={intl.formatMessage({ id: 'app.language' })}>
@@ -129,13 +131,13 @@ class App extends Component {
             </Menu.Item>
           </Menu.Menu>
         </Menu>
-        <br />
-        <br />
         <UsdcForm data={this.state} />
         <br />
         <br />
         <UsdtForm data={this.state} />
-
+        <br />
+        <br />
+        <UsdtForm data={this.state} />
       </Container >
     )
   }

@@ -9,6 +9,8 @@ import en from './i18n/en-us.js';
 import zh_cn from './i18n/zh-cn.js';
 import zh_tw from './i18n/zh-tw.js';
 
+import footer from './page/footer'
+
 import './index.css'
 
 // import pkg from 'semantic-ui-react/package.json'

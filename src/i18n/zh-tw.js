@@ -1,4 +1,5 @@
 const zh_tw = { 
+    'app.page': '分頁',
     'app.home': '主頁',
     'app.language': '語言',
     'app.disconnect': '斷開',

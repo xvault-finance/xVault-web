@@ -1,4 +1,5 @@
 const en = { 
+    'app.page': 'Page',
     'app.home': 'Home',
     'app.language': 'Language',
     'app.disconnect': 'Disconnect',

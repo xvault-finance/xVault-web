@@ -1,4 +1,5 @@
 const zh_cn = { 
+    'app.page': '分页',
     'app.home': '主页',
     'app.language': '语言',
     'app.disconnect': '断开',
