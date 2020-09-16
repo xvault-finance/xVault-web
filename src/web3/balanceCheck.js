@@ -1,6 +1,10 @@
 import ethers from 'ethers'
+import usdcContractAbi from './usdcContract.abi.json'
+import { web3js } from './connectWallet'
+const BigNumber = require('bignumber.js');
+const provider = window.ethereum;
 
-export default function tokenBalance({ tokenAddress, minimumBalance, tokenName }) {
+export function tokenBalance({ tokenAddress, minimumBalance, tokenName }) {
     let ethersProvider;
     let tokenContract;
 
@@ -18,15 +22,12 @@ export default function tokenBalance({ tokenAddress, minimumBalance, tokenName }
     ];
 
     return async stateAndHelpers => {
-        const {
-            wallet: { provider },
-            address,
-            BigNumber
-        } = stateAndHelpers;
+        const accounts = await web3js.eth.getAccounts();
+        const address = accounts[0];
 
         if (!tokenContract) {
-            ethersProvider = new ethers.providers.Web3Provider(provider);
-            tokenContract = new ethers.Contract(tokenAddress, abi, ethersProvider);
+            ethersProvider = new ethers.providers.Web3Provider(web3js.currentProvider);
+            tokenContract = new ethers.Contract(tokenAddress, usdcContractAbi, ethersProvider);
         }
 
         const tokenDecimals = await tokenContract.decimals();
@@ -35,6 +36,7 @@ export default function tokenBalance({ tokenAddress, minimumBalance, tokenName }
             .balanceOf(address)
             .then(res => res.toString());
         const tokenBalance = new BigNumber(tokenBalanceResult).div(divideBy);
+        // return tokenBalance
 
         if (tokenBalance.lt(minimumBalance)) {
             return {
@@ -59,4 +61,28 @@ export default function tokenBalance({ tokenAddress, minimumBalance, tokenName }
             };
         }
     };
+}
+
+export async function checkBalance({ tokenAddress }) {
+    let ethersProvider;
+    let tokenContract;
+
+    const accounts = await web3js.eth.getAccounts();
+    const address = accounts[0];
+
+    if (!tokenContract) {
+        ethersProvider = new ethers.providers.Web3Provider(web3js.currentProvider);
+        tokenContract = new ethers.Contract(tokenAddress, usdcContractAbi, ethersProvider);
+    }
+
+    const tokenDecimals = await tokenContract.decimals();
+    const divideBy = new BigNumber(10).pow(tokenDecimals);
+    const tokenBalanceResult = await tokenContract
+        .balanceOf(accounts[0])
+        .then(res => res.toString());
+    // const tokenBalance = new BigNumber(tokenBalanceResult).div(divideBy);
+    // tokenBalanceResult = tokenBalanceResult / (10 ** 6);
+    // console.log(tokenBalanceResult / (10 ** 6))
+    // return tokenBalance.c[0]
+    return tokenBalanceResult
 }

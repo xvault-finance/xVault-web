@@ -13,7 +13,9 @@
     "mock-local-storage": "^1.1.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-intl": "^5.8.1",
     "react-scripts": "3.4.3",
+    "request-promise": "^4.2.6",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.2.1",
     "use-wallet": "^0.8.0",
@@ -41,5 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

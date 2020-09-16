@@ -1,89 +1,18 @@
 import React, { Component } from 'react';
 
-import { Button } from 'semantic-ui-react'
-import { Container, Header, List } from "semantic-ui-react";
-import AccordionExampleForm from './form/form'
-import {login, resetWallet} from './web3/connectWallet'
+import { Container, Grid } from "semantic-ui-react";
+
+import { Button, Dropdown, Menu } from 'semantic-ui-react'
+import UsdcForm from './form/usdcForm'
+import UsdtForm from './form/usdtForm'
+import { login, resetWallet, web3js } from './web3/connectWallet'
+import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import footer from './page/footer'
+
+import './App.css'
 
 const BigNumber = require('bignumber.js');
-
-// let web3;
-
-// const defaultWalletChecks = [
-//   { checkName: 'connect' },
-//   { checkName: 'network' },
-//   { checkName: 'balance', minimumBalance: '0' }
-// ]
-
-// const tokenBalanceCheck = tokenBalance({ tokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f', tokenName: 'Dai', minimumBalance: 5 })
-
-// const onboard = Onboard({
-//   dappId: "2b2600b5-0267-4444-8c35-b18efce2693b",
-//   networkId: 1,
-//   subscriptions: {
-//     wallet: wallet => {
-//       web3 = new Web3(wallet.provider);
-//       localStorage.setItem('selectedWallet', wallet.name);
-//       console.log(wallet);
-//     }
-//   },
-//   walletSelect: {
-//     wallets: [
-//       {
-//         walletName: 'metamask',
-//         preferred: true
-//       },
-//       {
-//         walletName: 'coinbase',
-//         preferred: true
-//       },
-//       {
-//         walletName: "walletConnect",
-//         infuraKey: "b19d1248bdaa4d5080dfc8ad2020a05e"
-//       },
-//     ]
-//   },
-
-//   walletCheck: [...defaultWalletChecks, tokenBalanceCheck]
-// });
-
-// async function login() {
-//   const previouslySelectedWallet = localStorage.getItem('selectedWallet')
-
-//   let status
-//   if (previouslySelectedWallet == "undefined" || previouslySelectedWallet == false || previouslySelectedWallet == null) {
-//     status = await onboard.walletSelect();
-//   } else {
-//     status = await onboard.walletSelect(previouslySelectedWallet);
-//   }
-
-//   if (status == true) {
-//     let a = await onboard.walletCheck()
-//     console.log(a)
-//   }
-//   const currentState = onboard.getState()
-//   console.log(currentState)
-//   return currentState;
-//   // await onboard.walletCheck();
-// }
-
-// export default async function readyToTransact() {
-//   if (!provider) {
-//       const walletSelected = await onboard.walletSelect()
-//       if (!walletSelected) return false
-//   }
-
-//   const ready = await onboard.walletCheck()
-//   return ready
-// }
-
-// function resetWallet() {
-//   localStorage.removeItem('selectedWallet');
-//   onboard.walletReset();
-//   const currentState = onboard.getState()
-
-//   return currentState;
-// }
 
 class App extends Component {
   constructor(props) {
@@ -93,12 +22,15 @@ class App extends Component {
       currentState: {
         balance: 0
       },
-      balance: 0
+      balance: 0,
+      activeItem: 'Home'
     };
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleReset = this.handleReset.bind(this);
   }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   async componentDidMount() {
     const previouslySelectedWallet = localStorage.getItem('selectedWallet')
@@ -143,39 +75,72 @@ class App extends Component {
   }
 
   render() {
+    const { activeItem } = this.state
+    const { intl } = this.props;
+
     return (
-      <Container style={{ margin: 20 }}>
-        <div>
-          {this.state.logged === true ? (
-            <div>
-              <h1>xVault
-          {/* <div>Account: {wallet.account}</div>
-          <div>Balance: {wallet.balance}</div> */}
-                <Button
-                  color='grey'
-                  content='Disconnect Wallet'
-                  floated='right'
-                  onClick={this.handleReset}
-                />
-              </h1>
-            </div>
-          ) : (
-              <div>
-                <h1>xVault
-                <Button
-                    content='Connect Wallet'
-                    floated='right'
-                    onClick={this.handleLogin}
-                  />
-                </h1>
-              </div>
-            )}
-          {/* <button onClick={this.handleChange}>Connect Wallet</button> */}
-        </div>
-        <AccordionExampleForm data={this.state} />
-      </Container>
+
+      // <Container style={{ margin: 20 }}>
+      <Container>
+        <Menu inverted secondary>
+          <Menu.Item
+            name='xVault'
+            onClick={() => this.handleItemClick}
+          />
+
+          {/* <Dropdown item text={intl.formatMessage({ id: 'app.page' })}>
+            <Dropdown.Menu>
+              <Dropdown.Item active={activeItem === 'Home'} onClick={() => this.handleItemClick}>{intl.formatMessage({ id: 'app.home' })}</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown> */}
+
+          <Menu.Menu position='right'>
+            <Dropdown item text={intl.formatMessage({ id: 'app.language' })}>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => this.props.setLocale('en-US')}>English</Dropdown.Item>
+                <Dropdown.Item onClick={() => this.props.setLocale('zh-cn')}>简中</Dropdown.Item>
+                <Dropdown.Item onClick={() => this.props.setLocale('zh-tw')}>繁中</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Menu.Item>
+              {this.state.logged === true ? (
+
+                <FormattedMessage id="app.disconnect">
+                  {
+                    (msg) => <Button
+                      color='grey'
+                      content={msg}
+                      floated='right'
+                      onClick={this.handleReset}
+                    />
+                  }
+                </FormattedMessage>
+              ) : (
+                  <FormattedMessage id="app.connect">
+                    {
+                      (msg) => <Button
+                        content={msg}
+                        floated='right'
+                        onClick={this.handleLogin}
+                      />
+                    }
+                  </FormattedMessage>
+
+                )}
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+        <UsdcForm data={this.state} />
+        <br />
+        <br />
+        <UsdtForm data={this.state} />
+        <br />
+        <br />
+        <UsdtForm data={this.state} />
+      </Container >
     )
   }
 }
 
-export default App;
+export default injectIntl(App);

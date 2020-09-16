@@ -1,8 +1,8 @@
 import Onboard from "bnc-onboard"
 import Web3 from "web3";
-import tokenBalance from './balanceCheck'
+import {tokenBalance} from './balanceCheck'
 
-let web3;
+let web3js;
 
 const defaultWalletChecks = [
     { checkName: 'connect' },
@@ -17,7 +17,7 @@ const onboard = Onboard({
     networkId: 42,
     subscriptions: {
         wallet: wallet => {
-            web3 = new Web3(wallet.provider);
+            web3js = new Web3(wallet.provider);
             localStorage.setItem('selectedWallet', wallet.name);
         }
     },
@@ -79,4 +79,4 @@ function resetWallet() {
     return currentState;
 }
 
-export { web3, onboard, login, readyToTransact, resetWallet }
+export { web3js, onboard, login, readyToTransact, resetWallet }
