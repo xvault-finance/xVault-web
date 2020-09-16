@@ -49,9 +49,9 @@ class UsdcForm extends React.Component {
     handleInputChange(e) {
         let value = e.target.value;
         console.log(e.target.name)
-        if (!value.match(/^\d+(\.\d{1,2})?$/)) {
-            return
-        }
+        // if (!value.match(/^\d+(\.\d{1,2})?$/)) {
+        //     return
+        // }
 
         // if value is not blank, then test the regex
         this.setState({
